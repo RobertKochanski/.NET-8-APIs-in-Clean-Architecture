@@ -1,15 +1,14 @@
 @Restaurants.API_HostAddress = https://localhost:7238
 
-GET {{Restaurants.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
-
 GET {{Restaurants.API_HostAddress}}/api/restaurants
 
 ###
 
-GET {{Restaurants.API_HostAddress}}/api/restaurants/{be737252-fdb6-4eda-6e1a-08dc7f0257d1}
+GET {{Restaurants.API_HostAddress}}/api/restaurants/{fcbc971a-1f70-40f4-9f89-08dc86d1f820}
+
+###
+
+DELETE {{Restaurants.API_HostAddress}}/api/restaurants/{fcbc971a-1f70-40f4-9f89-08dc86d1f820}
 
 ###
 
@@ -25,7 +24,19 @@ Content-Type: application/json
   "ContactNumber": "555-123-4567",
   "City": "Metropolis",
   "Street": "456 Gourmet Avenue",
-  "PostalCode": "54321"
+  "PostalCode": "54-321"
 }
 
 ###
+
+PATCH {{Restaurants.API_HostAddress}}/api/restaurants/{409d7b2c-aa3c-442d-0852-08dc8a0a92e3}
+Content-Type: application/json
+
+{
+  "Name": "Sample patch2",
+  "Description": "This is a sample restaurant description.",
+  "HasDelivery": true
+}
+
+###
+

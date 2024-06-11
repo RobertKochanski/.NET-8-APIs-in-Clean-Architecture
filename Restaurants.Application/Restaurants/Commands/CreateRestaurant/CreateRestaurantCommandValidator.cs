@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
-using Restaurants.Application.Restaurants.Dtos;
 
-namespace Restaurants.Application.Restaurants.Validators
+namespace Restaurants.Application.Restaurants.Commands.CreateRestaurant
 {
-    public class CreateRestaurantDtoValidator : AbstractValidator<CreateRestaurantDto>
+    public class CreateRestaurantCommandValidator : AbstractValidator<CreateRestaurantCommand>
     {
         private readonly List<string> validCategories = ["Italian", "Mexican", "Japanese", "American", "Indian"];
 
-        public CreateRestaurantDtoValidator()
+        public CreateRestaurantCommandValidator()
         {
             RuleFor(dto => dto.Name)
                 .Length(3, 100);
@@ -16,17 +15,17 @@ namespace Restaurants.Application.Restaurants.Validators
                 .Must(validCategories.Contains)
                 .WithMessage("Invalid category. Please choose from the valid categories.");
 
-                //.Custom((value, context) =>
-                //{
-                //    var isValidCategory = validCategories.Contains(value);
-                //    if (!isValidCategory)
-                //    {
-                //        context.AddFailure("Category", "Invalid category. Please choose from the valid categories.");
-                //    }
-                //});
+            //.Custom((value, context) =>
+            //{
+            //    var isValidCategory = validCategories.Contains(value);
+            //    if (!isValidCategory)
+            //    {
+            //        context.AddFailure("Category", "Invalid category. Please choose from the valid categories.");
+            //    }
+            //});
 
-                //.NotEmpty()
-                //.WithMessage("Description is required.");
+            //.NotEmpty()
+            //.WithMessage("Description is required.");
 
             RuleFor(dto => dto.ContactEmail)
                 .EmailAddress()
