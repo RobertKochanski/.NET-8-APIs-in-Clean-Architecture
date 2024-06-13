@@ -4,7 +4,7 @@ GET {{Restaurants.API_HostAddress}}/api/restaurants
 
 ###
 
-GET {{Restaurants.API_HostAddress}}/api/restaurants/{fcbc971a-1f70-40f4-9f89-08dc86d1f820}
+GET {{Restaurants.API_HostAddress}}/api/restaurants/{be737252-fdb6-4eda-6e1a-08dc7f0257d1}
 
 ###
 
@@ -29,7 +29,7 @@ Content-Type: application/json
 
 ###
 
-PATCH {{Restaurants.API_HostAddress}}/api/restaurants/{409d7b2c-aa3c-442d-0852-08dc8a0a92e3}
+PATCH {{Restaurants.API_HostAddress}}/api/restaurants/{b01b2f09-bece-4821-24ee-08dc8b8e2435}
 Content-Type: application/json
 
 {

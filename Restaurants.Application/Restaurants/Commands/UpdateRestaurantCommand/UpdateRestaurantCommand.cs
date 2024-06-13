@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Restaurants.Application.Restaurants.Commands.UpdateRestaurantCommand
 {
-    public class UpdateRestaurantCommand : IRequest<bool>
+    public class UpdateRestaurantCommand : IRequest
     {
         [JsonIgnore]
         public Guid Id { get; set; }
