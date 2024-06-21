@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Restaurants.Domain.Contants;
 using Restaurants.Domain.Entities;
 using Restaurants.Domain.Exceptions;
+using Restaurants.Domain.Interfaces;
 using Restaurants.Domain.Repositories;
 
 namespace Restaurants.Application.Dishes.Commands.CreateDish
@@ -10,7 +12,8 @@ namespace Restaurants.Application.Dishes.Commands.CreateDish
     public class CreateDishCommandHandler(ILogger<CreateDishCommandHandler> logger,
         IRestaurantsRepository restaurantsRepository,
         IDishesRepository dishesRepository,
-        IMapper mapper) : IRequestHandler<CreateDishCommand, Guid>
+        IMapper mapper,
+        IRestaurantAuthorizationService restaurantAuthorizationService) : IRequestHandler<CreateDishCommand, Guid>
     {
         public async Task<Guid> Handle(CreateDishCommand request, CancellationToken cancellationToken)
         {
@@ -20,6 +23,11 @@ namespace Restaurants.Application.Dishes.Commands.CreateDish
             if (restaurant is null)
             {
                 throw new NotFoundException(nameof(Restaurant), request.RestaurantId.ToString());
+            }
+
+            if (!restaurantAuthorizationService.Authorize(restaurant, ResourceOperation.Update))
+            {
+                throw new ForbidException();
             }
 
             var dish = mapper.Map<Dish>(request);
