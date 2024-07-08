@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Restaurants.Application.Restaurants.Commands.CreateRestaurant;
 using Restaurants.Application.Restaurants.Commands.DeleteRestaurant;
 using Restaurants.Application.Restaurants.Commands.UpdateRestaurantCommand;
+using Restaurants.Application.Restaurants.Commands.UploadRestaurantLogo;
 using Restaurants.Application.Restaurants.Dtos;
 using Restaurants.Application.Restaurants.Queries.GetAllRestaurants;
 using Restaurants.Application.Restaurants.Queries.GetRestaurantById;
@@ -28,7 +29,7 @@ namespace Restaurants.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Policy = PolicyNames.HasNationality)]
+        //[Authorize(Policy = PolicyNames.HasNationality)]
         public async Task<ActionResult<RestaurantDto?>> GetById([FromRoute] Guid id)
         {
             var restaurant = await mediator.Send(new GetRestaurantByIdQuery(id));
@@ -69,6 +70,22 @@ namespace Restaurants.API.Controllers
             var id = await mediator.Send(command);
 
             return CreatedAtAction(nameof(GetById), new { id }, null);
+        }
+
+        [HttpPost("{id}/logo")]
+        public async Task<IActionResult> UploadLogo([FromRoute] Guid id, IFormFile file)
+        {
+            using var stream = file.OpenReadStream();
+
+            var command = new UploadRestaurantLogoCommand()
+            {
+                RestaurantId = id,
+                FileName = $"{id}-{file.FileName}",
+                File = stream
+            };
+
+            await mediator.Send(command);
+            return NoContent();
         }
     }
 }

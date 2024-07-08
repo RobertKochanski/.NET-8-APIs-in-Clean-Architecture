@@ -1,14 +1,20 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Restaurants.Domain.Contants;
 using Restaurants.Domain.Entities;
 using Restaurants.Infrastructure.Persistence;
 
 namespace Restaurants.Infrastructure.Seeders
 {
-    internal class RestaurantSeeder(RestaurantsDbContext dbContext) : IRestaurantSeeder
+    internal class RestaurantSeeder(RestaurantsDbContext dbContext, UserManager<User> userManager) : IRestaurantSeeder
     {
         public async Task Seed()
         {
+            if (dbContext.Database.GetPendingMigrations().Any())
+            {
+                await dbContext.Database.MigrateAsync();
+            }
+
             if (await dbContext.Database.CanConnectAsync())
             {
                 if (!dbContext.Restaurants.Any())
@@ -22,6 +28,17 @@ namespace Restaurants.Infrastructure.Seeders
                 {
                     var roles = GetRoles();
                     dbContext.Roles.AddRange(roles);
+                    await dbContext.SaveChangesAsync();
+                }
+
+                if (!dbContext.Users.Any())
+                {
+                    var user = new User()
+                    {
+                        Email = "admin@test.com",
+                    };
+
+                    await userManager.CreateAsync(user, "Password1!");
                     await dbContext.SaveChangesAsync();
                 }
             }
@@ -47,10 +64,16 @@ namespace Restaurants.Infrastructure.Seeders
 
         private IEnumerable<Restaurant> GetRestaurants()
         {
+            User owner = new User()
+            {
+                Email = "seed-user@test.com",
+            };
+
             var restaurants = new List<Restaurant>()
             {
                 new Restaurant
                 {
+                    Owner = owner,
                     Name = "KFC",
                     Category = "Fast Food",
                     Description = "KFC (short for Kentucky Fried Chicken)",
@@ -81,6 +104,7 @@ namespace Restaurants.Infrastructure.Seeders
 
                 new Restaurant
                 {
+                    Owner = owner,
                     Name = "MCDonald",
                     Category = "Fast Food",
                     Description = "MCDonald",
