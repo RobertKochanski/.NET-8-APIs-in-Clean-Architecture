@@ -1,4 +1,4 @@
-name: restaurants-api-CI
+name: restaurants-api-ci
 
 on:
   pull_request:
